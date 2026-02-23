@@ -1,0 +1,341 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+body {
+  font-family: 'Exo 2', sans-serif;
+  color: #fff;
+}
+
+/* Main container */
+.app {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Canvas */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Loading screen */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0a0a0a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: opacity 0.5s ease;
+}
+
+.loading-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #fff 0%, #888 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 40px;
+}
+
+.loading-bar-container {
+  width: 200px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.loading-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #fff, #666);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.loading-text {
+  margin-top: 20px;
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+}
+
+/* UI Overlay */
+.ui-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Header */
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 30px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: rgba(255,255,255,0.8);
+}
+
+.header-right {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.audio-btn {
+  display: flex;
+  gap: 3px;
+  align-items: flex-end;
+  height: 20px;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.audio-bar {
+  width: 3px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 2px;
+  animation: audioBar 0.5s ease infinite alternate;
+}
+
+.audio-bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+.audio-bar:nth-child(2) { height: 14px; animation-delay: 0.1s; }
+.audio-bar:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+.audio-bar:nth-child(4) { height: 16px; animation-delay: 0.3s; }
+
+@keyframes audioBar {
+  from { height: 4px; }
+  to { height: 16px; }
+}
+
+/* Color selector */
+.color-selector {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  pointer-events: auto;
+}
+
+.color-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.color-btn:hover {
+  transform: scale(1.2);
+}
+
+.color-btn.active {
+  border-color: #fff;
+  box-shadow: 0 0 20px currentColor;
+}
+
+.color-btn::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.color-btn.active::after {
+  opacity: 1;
+}
+
+/* Interaction hint */
+.interaction-hint {
+  position: absolute;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.hint-circle {
+  width: 60px;
+  height: 60px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 1; }
+}
+
+.hint-text {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+
+/* Cinematic bars */
+.cinematic-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+}
+
+.cinematic-bar.top {
+  top: 0;
+}
+
+.cinematic-bar.bottom {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+}
+
+/* Data overlay */
+.data-overlay {
+  position: absolute;
+  bottom: 80px;
+  left: 40px;
+  font-family: 'Exo 2', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.3);
+}
+
+.data-line {
+  margin-bottom: 5px;
+}
+
+/* Grid lines */
+.grid-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.grid-line {
+  position: absolute;
+  background: rgba(255,255,255,0.05);
+}
+
+.grid-line.vertical {
+  width: 1px;
+  height: 100%;
+  top: 0;
+}
+
+.grid-line.horizontal {
+  width: 100%;
+  height: 1px;
+  left: 0;
+}
+
+/* Title */
+.car-title {
+  position: absolute;
+  top: 50%;
+  right: 60px;
+  transform: translateY(-50%);
+  text-align: right;
+}
+
+.car-title h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 6px;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.car-title h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: rgba(255,255,255,0.8);
+}
+
+/* Speed indicator */
+.speed-indicator {
+  position: absolute;
+  bottom: 80px;
+  right: 40px;
+  text-align: right;
+}
+
+.speed-value {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 48px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.8);
+  line-height: 1;
+}
+
+.speed-unit {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+}
